@@ -1043,10 +1043,15 @@
     btn.textContent = 'Sending...';
 
     try {
-      const res = await fetch('/api/send-proposal', {
+      const savedServices = Array.from(favorites);
+      const fullMessage = savedServices.length > 0
+        ? `SERVICES INTERESTED IN:\n${savedServices.map(s => `- ${s}`).join('\n')}\n\nMESSAGE:\n${message}`
+        : message;
+
+      const res = await fetch('https://formspree.io/f/xkoqnbpz', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, company, message, savedServices: Array.from(favorites) })
+        body: JSON.stringify({ name, email, company, message: fullMessage })
       });
       if (!res.ok) throw new Error();
       document.getElementById('form-view').style.display = 'none';
