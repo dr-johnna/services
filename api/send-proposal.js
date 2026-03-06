@@ -60,8 +60,9 @@ module.exports = async function handler(req, res) {
 
     if (!resendRes.ok) {
       const err = await resendRes.text();
-      console.error('Resend error:', err);
-      throw new Error('Resend failed');
+      console.error('Resend error status:', resendRes.status);
+      console.error('Resend error body:', err);
+      throw new Error('Resend failed: ' + err);
     }
 
     return res.status(200).json({ success: true });
